@@ -1,0 +1,18 @@
+---
+# handlers file for OSP6-backup
+# file: roles/OSP6-backup/handlers/main.yml
+
+- name: restart mariadb
+  service: 
+    name: mariadb
+    state: restarted
+
+- name: restart openstack-glance-registry
+  service: 
+    name: openstack-glance-registry
+    state: restarted
+
+- name: restart openstack-glance-api
+  service: 
+    name: openstack-glance-api
+    state: restarted
