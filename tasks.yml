@@ -15,12 +15,12 @@
     name: MySQL-python
     state: present
   delegate_to: mariadb
-  tags: 
+  tags:
     - mysql
     - install
 
 - name: Create mysqldump of all databases
-  mysql_db: 
+  mysql_db:
     state: dump
     name: all
     target: "/{{ BACKUP_LOCATION }}/{{ inventory_hostname }}-{{ ansible_date_time.date }}.sql"
@@ -39,16 +39,18 @@
     - glance
     - swift
     - nova
-  tags: 
+  tags:
     - etc
     - rsync
 
-- name: Backup /var/lib configurations
+- name: Backup /var/lib configurations except the instances directory
   synchronize:
     archive: yes
     src: : "/var/lib/{{ items }}"
     dest: "/{{ BACKUP_LOCATION }}/{{ inventory_hostname }}-{{ ansible_date_time.date }}-{{ items }}-varlib"
-    rsync_opts: 
+    rsync_opts:
+      - "--no-motd"
+      - "--exclude 'instances'"
   delegate_to: "{{ items }}"
   with_items:
     - glance
