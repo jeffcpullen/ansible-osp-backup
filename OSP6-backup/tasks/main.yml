@@ -14,7 +14,6 @@
   yum:
     name: MySQL-python
     state: present
-  delegate_to: mariadb
   tags:
     - mysql
     - install
@@ -24,7 +23,6 @@
     state: dump
     name: all
     target: "/{{ BACKUP_LOCATION }}/{{ inventory_hostname }}-{{ ansible_date_time.date }}.sql"
-  delegate_to: mariadb
   tags:
     - mysql
     - database
@@ -32,9 +30,8 @@
 - name: Backup etc configurations
   synchronize:
     archive: yes
-    src: : "/etc/{{ items }}"
+    src: "/etc/{{ items }}"
     dest: "/{{ BACKUP_LOCATION }}/{{ inventory_hostname }}-{{ ansible_date_time.date }}-{{ items }}-etc"
-  delgate_to: "{{ items }}"
   with_items:
     - glance
     - swift
@@ -46,12 +43,11 @@
 - name: Backup /var/lib configurations except the instances directory
   synchronize:
     archive: yes
-    src: : "/var/lib/{{ items }}"
+    src: "/var/lib/{{ items }}"
     dest: "/{{ BACKUP_LOCATION }}/{{ inventory_hostname }}-{{ ansible_date_time.date }}-{{ items }}-varlib"
     rsync_opts:
       - "--no-motd"
       - "--exclude 'instances'"
-  delegate_to: "{{ items }}"
   with_items:
     - glance
     - swift
@@ -63,13 +59,12 @@
 - name: Backup /var/log files
   synchronize:
     archive: yes
-    src: : "/var/log/{{ items }}"
+    src: "/var/log/{{ items }}"
     dest: "/{{ BACKUP_LOCATION }}/{{ inventory_hostname }}-{{ ansible_date_time.date }}-{{ items }}-varlog"
   with_items:
     - glance
     - swift
     - nova
-  delegate_to: "{{ items }}"
   tags:
     - varlog
     - rsync
@@ -77,9 +72,8 @@
 - name: Backup /var/lib/glance/images files
   synchronize:
     archive: yes
-    src: : /var/lib/glance/images
+    src: /var/lib/glance/images
     dest: "/{{ BACKUP_LOCATION }}/{{ inventory_hostname }}-{{ ansible_date_time.date }}-glance-varlibglanceimages"
-  delegate_to: glance
   tags:
     - glance
     - rsync

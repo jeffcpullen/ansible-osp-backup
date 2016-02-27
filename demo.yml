@@ -1,0 +1,5 @@
+---
+- hosts: openstack
+  roles:
+    - { role: OSP6-backup, tags: [ 'db', 'install' ] }
+    - { role: OSP6-backup, tags: [ 'rsync', 'install' ] }
