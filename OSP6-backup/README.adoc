@@ -1,0 +1,8 @@
+= ansible-osp-backup
+WARNING: WORK IN PROGRESS - do not use in production
+
+Ansible backup scripts for OSP
+
+== When to apply
+
+This role should be applied to all OpenStack nodes that need to be backed up.
